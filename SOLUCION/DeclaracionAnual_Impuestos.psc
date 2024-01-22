@@ -17,6 +17,20 @@ Algoritmo DeclaracionAnual_Impuestos
     impuestoAPagar = 0
 	
 	totalIngresos = ingresarSueldos(sueldos)
+	totalDeducciones = ingresarFacturas(facturas, categorias)
+	Si totalIngresos < 0 o totalDeducciones < 0 Entonces
+        Escribir "Los ingresos y las deducciones no pueden ser negativos."
+        
+    FinSi
+	
+    
+    baseImponible = totalIngresos - totalDeducciones
+    impuestoAPagar = calcularImpuesto(baseImponible) 
+	
+    
+    generarDeclaracion(totalIngresos, totalDeducciones, baseImponible, impuestoAPagar)
+	
+FinAlgoritmo
 	
 	Dimension datosUsuario(numeroParametros, 1)
 	pedirDatosUsuario(datosUsuario)
@@ -32,6 +46,24 @@ Funcion totalIngresos = ingresarSueldos(sueldos)
         Leer sueldos[mes]
         totalIngresos = totalIngresos + sueldos[mes]
     Fin Para
+Fin Funcion
+
+Funcion totalDeducciones = ingresarFacturas(facturas, categorias)
+    totalDeducciones = 0
+    Para mes <- 1 Hasta 12 Con Paso 1 Hacer
+        Para cat <- 1 Hasta 6 Con Paso 1 Hacer
+            Escribir "Ingrese el total de facturas de ", categorias[cat], " del mes ", mes, ": "
+            Leer facturas[mes, cat]
+            totalDeducciones = totalDeducciones + facturas[mes, cat]
+        Fin Para
+    Fin Para
+Fin Funcion
+
+Funcion generarDeclaracion(totalIngresos, totalDeducciones, baseImponible, impuestoAPagar)
+    Escribir "Total de ingresos: ", totalIngresos
+    Escribir "Total de deducciones: ", totalDeducciones
+    Escribir "Base imponible: ", baseImponible
+    Escribir "Impuesto a pagar: ", impuestoAPagar
 Fin Funcion
 
 SubProceso pedirDatosUsuario(datosUsuario Por Referencia)
