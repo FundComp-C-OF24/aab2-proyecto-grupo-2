@@ -13,18 +13,20 @@ Algoritmo DeclaracionAnual_Impuestos
 	Definir iess Como Real
 	Definir maxDeductRate Como Real
 	maxDeductRate = 0.18
+	Definir earnsDividends,showTaxTable Como Logico
 	
     Dimension facturas[12, 6]
     Dimension sueldos[12]
 	totalIngresos = 0
     totalDeducciones = 0
     impExcedentePagar = 0
-	
+	año = 2023
 	// Iniciar programa obteniendo datos:
 	Escribir "Ingresa tu nombre: "
 	leer nombre 
 	totalIngresos = ingresarSueldos(sueldos, iess)
 	//totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
+	// Test-line: 
 	totalDeducciones = 5352.97
 	// Procesar deducciones
 	Si (totalIngresos < 0 o totalDeducciones < 0) Entonces
@@ -34,12 +36,29 @@ Algoritmo DeclaracionAnual_Impuestos
 	
     
     baseImponible = totalIngresos - totalDeducciones
+	
+	Escribir "Obtiene usted ingresos por pertenecer a alguna sociedad o corporacion que le distribuye dividendos o utilidades? (V o F)"
+	Leer earnsDividends
+	Si (earnsDividends) Entonces
+		Escribir "Cuanto $ en dividendos usted recibe anualmente"
+		Leer dividends
+		Escribir "Cual es la base impositiva ( en %) que paga su sociedad por distribuir cada dividendo?"
+		Leer dividendsTaxRate
+	FinSi
+	
+	retornoImpuestos = dividends * (dividendsTaxRate*0.01)
+	
     calcularImpuesto(baseImponible, impBasico, impExcedente, impExcedentePagar, impTotal) 
 	
     
-    generarDeclaracion(nombre, totalIngresos, totalDeducciones, baseImponible,impExcedentePagar, impExcedente, iess)
+    generarDeclaracion(nombre, totalIngresos, totalDeducciones, baseImponible,impExcedentePagar, impExcedente,impBasico, impTotal, iess, retornoImpuestos)
 	
-
+	
+	Escribir "Desea conocer la tabla de Impuesto a la Renta para Personas Naturales (2023)? ( V o F)"
+	Leer showTaxTable
+	Si (showTaxTable) Entonces
+		taxTable(año)
+	FinSi
 	
 	
 FinAlgoritmo
@@ -74,8 +93,8 @@ Funcion totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
 	totalDeducciones = totalDeducciones * maxDeductRate
 FinFuncion
 
-Funcion generarDeclaracion(nombre, totalIngresos, totalDeducciones, baseImponible, impExcedentePagar, impExcedente, iess)
-	Escribir "Estimado/a", nombre
+Funcion generarDeclaracion(nombre, totalIngresos, totalDeducciones, baseImponible, impExcedentePagar, impExcedente, impBasico, impTotal, iess, retornoImpuestos)
+	Escribir "Estimado/a ", nombre
 	Escribir "Total de ingresos: ", totalIngresos
     Escribir "Total de deducciones: ", totalDeducciones
 	Escribir "-------------------------------------------------"
@@ -90,7 +109,9 @@ Funcion generarDeclaracion(nombre, totalIngresos, totalDeducciones, baseImponibl
 	Escribir "-------------------------------------------------"
 	Escribir "Informacion adicional:"
 	Escribir "Aporte al IESS: ",iess
-	
+	Escribir "Credito tributario o devolucion (por dividendos Corporativos): ", retornoImpuestos, "$"
+	Escribir "-------------------------------------------------"
+
 FinFuncion
 
 SubProceso calcularImpuesto(baseImponible, impBasico Por Referencia, impExcedente Por Referencia, impExcedentePagar Por Referencia, impTotal Por Referencia)
@@ -137,6 +158,23 @@ SubProceso calcularImpuesto(baseImponible, impBasico Por Referencia, impExcedent
 		FinSi
 	FinSi
 	impExcedentePagar= baseImponible*impExcedente
+	impBasico = impBasico
 	impTotal = impBasico+impExcedentePagar
 FinSubProceso
-	
+
+SubProceso taxTable(año)
+	Si (año==2023) Entonces 
+	Escribir "Fracción Básica	Exceso hasta	Impuesto Fracción Básica	% Impuesto Fracción Excedente"
+	Escribir "$ 0,00	$ 11.722,00	$ 0,00	0%"
+	Escribir "$ 11.722,00	$ 14.930,00	$ 0,00	5%"
+	Escribir "$ 14.930,00	$ 19.385,00	$ 160,00	10%"
+	Escribir "$ 19.385,00	$ 25.638,00	$ 606,00	12%"
+	Escribir "$ 25.638,00	$ 33.738,00	$ 1.356,00	15%"
+	Escribir "$ 33.738,00	$ 44.721,00	$ 2.571,00	20%"
+	Escribir "$ 44.721,00	$ 59.537,00	$ 4.768,00	25%"
+	Escribir "$ 59.537,00	$ 79.388,00	$ 8.472,00	30%"
+	Escribir "$ 79.388,00	$ 105.580,00 $ 14.427,00	35%"
+	Escribir "$ 105.580,00	en adelante	$ 23.594,00	37%"
+FinSi
+
+FinSubProceso
