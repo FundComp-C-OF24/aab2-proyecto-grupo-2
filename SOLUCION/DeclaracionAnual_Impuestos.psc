@@ -25,9 +25,8 @@ Algoritmo DeclaracionAnual_Impuestos
 	Escribir "Ingresa tu nombre: "
 	leer nombre 
 	totalIngresos = ingresarSueldos(sueldos, iess)
-	//totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
-	// Test-line: 
-	totalDeducciones = 5352.97
+	totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
+	// Test-line: totalDeducciones = 5352.97
 	// Procesar deducciones
 	Si (totalIngresos < 0 o totalDeducciones < 0) Entonces
         Escribir "Los ingresos y las deducciones no pueden ser negativos."
