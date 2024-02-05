@@ -25,9 +25,8 @@ Algoritmo DeclaracionAnual_Impuestos
 	Escribir "Ingresa tu nombre: "
 	leer nombre 
 	totalIngresos = ingresarSueldos(sueldos, iess)
-	//totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
-	// Test-line: 
-	totalDeducciones = 5352.97
+	totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
+	// Test-line: totalDeducciones = 5352.97
 	// Procesar deducciones
 	Si (totalIngresos < 0 o totalDeducciones < 0) Entonces
         Escribir "Los ingresos y las deducciones no pueden ser negativos."
@@ -68,7 +67,9 @@ Funcion totalIngresos = ingresarSueldos(sueldos, iess Por Referencia)
     
     Para mes <- 0 Hasta 11 Con Paso 1 Hacer
         Escribir "Ingrese su sueldo del mes ", mes+1, ": "
-        Leer sueldos[mes]
+		sueldoActual = Aleatorio(450, 2000)
+        sueldos[mes] = sueldoActual
+		Escribir "Sueldo generado: ", sueldoActual
         totalIngresos = totalIngresos + sueldos[mes]
     Fin Para
 	iess = totalIngresos*0.1145
@@ -81,7 +82,10 @@ Funcion totalDeducciones = ingresarFacturas(facturas, categoria, maxDeductRate)
     Para mes <- 0 Hasta 11 Con Paso 1 Hacer
         Para cat <- 0 Hasta 5 Con Paso 1 Hacer
             Escribir "Ingrese el total en costo de facturas de ", categoria[cat], " del mes ", mes+1, ": "
-            Leer facturas[mes, cat]
+			costoFacturaActual = Aleatorio(150,1000)
+            facturas[mes, cat] = costoFacturaActual
+			
+			Escribir "Costo de factura generado: ", costoFacturaActual
             totalDeducciones = totalDeducciones + facturas[mes, cat]
         Fin Para
     Fin Para
